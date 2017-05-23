@@ -12,17 +12,21 @@
 		<hr>
 		<div id="main">
 			<article>
-				{% for word in words %}
-					{{ word }}
+				{% for entry in entries %}
+					<span title={{ entry[1] }}>{{ entry[0] }}</span>
 				{% endfor %}
 			</article>
 		</div>
 		<hr>
 		<footer>
 			<form action="." method="POST">
+				Who are you?:
+  				<input type="text" name="your_name">
+  				<br>
   				Next word:
   				<input type="text" name="new_word" autofocus="autofocus">
   				<input type="submit">
+
 			</form>
 		</footer>
 	</body>
