@@ -9,7 +9,9 @@ TODO:
   * Pippeys
 - [ ] Set up postgres database for archived stories (link, story)
   * Pippeys
-- [ ] Write flask app to serve webpages
+- [x] Write flask app to serve webpages
   * Sarulian
 - [ ] Write python functions for backend processing of inputs
+  * Both
+- [ ] Python function that gets image link from sentence
   * Both
