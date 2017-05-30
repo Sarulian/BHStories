@@ -5,10 +5,45 @@ import BHStories
 
 app = Flask(__name__)
 
+# [word1,word2,word3,...]
 entries = []
+
+# {IP address:[name, time since last input]}
 users = {}
 
-@app.route('/', methods=['GET', 'POST'])
+
+# Returns only the first word of a series of words
+def limit_one_word(user_input):
+
+	return user_input.split()[0]
+
+
+# Returns the time since the last input was made by this user
+def get_time_limit(ip_addr):
+
+	if ip_addr in users:
+		now = datetime.now()
+		last_input = users[ip_addr][1]
+		return now - last_input
+	else:
+		return 0
+
+
+# If user name is entered, save with user IP, otherwise lookup. If no name is found return IP address.
+def get_name(name_input, ip_addr):
+
+	name = ip_addr
+
+	if name_input != '':
+		name = name_input
+		users[ip_addr][0] = name
+	elif ip_addr in users:
+		name = users[ip_addr][0]
+
+	return name
+
+
+@app.route('/active_story', methods=['GET', 'POST'])
 def active_story():
 
 	# Just show page if user accesses for first time/refreshes
@@ -21,19 +56,18 @@ def active_story():
 	user_input = request.form['new_word']
 
 	# Limit user input to one word
-	word = BHStories.limit_one_word(user_input)
+	word = limit_one_word(user_input)
 
 	# If user name is entered, save with user IP, otherwise lookup. If no name is found return IP address.
-	if request.form['your_name'] != '':
-		name = request.form['your_name']
-		users[ip_addr] = name
-	elif ip_addr in users:
-		name = users[ip_addr]
-	else:
-		name = ip_addr
+	name = get_name(request.form['your_name'], ip_addr)
+
+	print(get_time_limit(ip_addr))
 
 	# Save new word and name to display
 	entries.append([word, name])
+
+	# Record time of input
+	# users[ip_addr][1] = datetime.now()
 
 	# Refresh page
 	return redirect(url_for('active_story'))

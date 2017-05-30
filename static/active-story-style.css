@@ -14,6 +14,22 @@ header {
 	/*background: blue;*/
 }
 
+h1 {
+	font-size: 2.5em;
+	height: 10vh;
+	line-height: 0.3em;
+	padding: 1em;
+	background: blue;
+}
+
+h2 {
+	text-align: right;
+	font-size: 1em;
+	line-height: 0.3em;
+	padding: 1em;
+	background: blue;
+}
+
 #main {
 	display: flex;
 	min-height: calc(100vh - 30vh);
