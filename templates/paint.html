@@ -1,7 +1,7 @@
 {% include "base.html" %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <body onload="pencil()">
+    <body onload="pencil()" style="cursor:crosshair">
         <p><h2 id="title">Paint App</h2></p>
         <p><table>
             <tr>
