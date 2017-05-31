@@ -73,5 +73,11 @@ def active_story():
 	return redirect(url_for('active_story'))
 
 
+@app.route('/', methods=['GET'])
+def start_menu():
+	
+	return render_template('start_menu.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=4444)
