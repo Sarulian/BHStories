@@ -7,9 +7,13 @@
 
 <body onload="pencil()">
 
-	<div class="ftop"></div>
+	<div class="ftop">
+		<h1>0:59</h1>
+	</div>
 
 	<div class="fleft">
+
+		<h2>Draw!</h2>
 
 		<canvas id="paint" width="500" height="500" style="cursor:crosshair; border: 1px solid #000000;"></canvas>
 
@@ -59,13 +63,28 @@
                 </tr>
             </table>
         </fieldset>
+
+        <textarea id="prevtext" readonly>
+Shrek beating up the teletubbies.
+		</textarea>
+
 	</div>
 
 	<div class="fright">
+
+		<h2>Guess!</h2>
 		
+		<img id="prevpic" src="../static/teletest.png" alt="What the heck is this?" style="width:500px; height:500px;">
+
+		<textarea id="newtext">
+		</textarea>
+
+
 	</div>
+
 	<script src=" {{ url_for('static', filename='script.js') }}"></script>
     <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+
 </body>
 </html>
 
