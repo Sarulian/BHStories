@@ -73,22 +73,6 @@ def active_story():
 	return redirect(url_for('active_story'))
 
 
-@app.route('/paint', methods=['GET', 'POST'])
-def paintapp():
-    if request.method == 'GET':
-        return render_template("base.html")
-    if request.method == 'POST':
-        filename = request.form['save_fname']
-        data = request.form['save_cdata']
-        canvas_image = request.form['save_image']
-    #     conn = psycopg2.connect(database="paintmyown", user = "nidhin")
-    #     cur = conn.cursor()
-    #     cur.execute("INSERT INTO files (name, data, canvas_image) VALUES (%s, %s, %s)", [filename, data, canvas_image])
-    #     conn.commit()
-    #     conn.close()
-    #     return redirect(url_for('save'))  
-
-
 @app.route('/playing', methods=['GET'])
 def in_game():
 
