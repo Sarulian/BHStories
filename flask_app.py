@@ -89,6 +89,12 @@ def paintapp():
     #     return redirect(url_for('save'))  
 
 
+@app.route('/base', methods=['GET'])
+def base():
+	
+	return render_template('basetest.html')
+
+
 @app.route('/', methods=['GET'])
 def start_menu():
 
