@@ -89,10 +89,10 @@ def paintapp():
     #     return redirect(url_for('save'))  
 
 
-@app.route('/base', methods=['GET'])
-def base():
-	
-	return render_template('basetest.html')
+@app.route('/playing', methods=['GET'])
+def in_game():
+
+	return render_template('ingame.html')
 
 
 @app.route('/', methods=['GET'])
