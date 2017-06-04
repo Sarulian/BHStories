@@ -19,6 +19,26 @@ users = {}
 prev_doodle = ['prev_image', 'prev_text']
 
 
+class User:
+
+	def __init__(self, name, index):
+		self.name = name
+		self.index = index
+
+	def set_name(self, name):
+		self.name = name
+
+	def set_index(self, index):
+		self.index = index
+
+	def get_name(self):
+		return self.name
+
+	def get_index(self):
+		return self.index
+
+
+
 # Returns only the first word of a series of words
 def limit_one_word(user_input):
 
@@ -80,6 +100,20 @@ def active_story():
 	return redirect(url_for('active_story'))
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+
+	if request.method == 'GET':
+
+		return render_template('login.html')
+
+	elif request.method == 'POST':
+
+		new_user_name = request.form['username']
+
+		
+
+
 @app.route('/playing', methods=['GET','POST'])
 def in_game():
 	global prev_doodle
@@ -114,4 +148,13 @@ def start_menu():
 
 
 if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0', port=4444)
+	#app.run(debug=True, host='0.0.0.0', port=4444)
+	new_user = User("Ted", 0)
+	print("Created new user.")
+	print("Username: %s" %new_user.get_name())
+	print("Place in order: %i" %new_user.get_index())
+	print("Updating user info.")
+	new_user.set_name("Scott")
+	new_user.set_index(1)
+	print("Username: %s" %new_user.get_name())
+	print("Place in order: %i" %new_user.get_index())
