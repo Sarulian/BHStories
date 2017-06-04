@@ -1,4 +1,4 @@
-var canvas = document.getElementById("paint");
+var canvas = document.getElementById("nextImage");
 var ctx = canvas.getContext("2d");
 var width = canvas.width;
 var height = canvas.height;
@@ -103,10 +103,15 @@ function eraser(){
 }  
 
 function save(){
-    var filename = document.getElementById("fname").value;
-    var data = JSON.stringify(canvas_data);
-    var image = canvas.toDataURL();
+
+    var next_image = canvas.toDataURL();
+    var next_text = document.getElementById("nextText").value;
     
-    $.post("/", { save_fname: filename, save_cdata: data, save_image: image });
-    alert(filename + " saved");
+    $.post('/playing', { next_image: next_image, next_text: next_text });
+
+    setTimeout(function() {
+        location.reload();
+    }, 500);
+    
 } 
+

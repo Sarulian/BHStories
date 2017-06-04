@@ -1,21 +1,23 @@
 <html>
 
 <header>
+
     <title>Have Fun!</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
 </header>
 
 <body onload="pencil()">
 
 	<div class="ftop">
-		<h1>0:59</h1>
+		<button onclick="save()">Next Doodle</button>
 	</div>
 
 	<div class="fleft">
 
 		<h2>Draw!</h2>
 
-		<canvas id="paint" width="500" height="500" style="cursor:crosshair; border: 1px solid #000000;"></canvas>
+		<canvas id="nextImage" width="500" height="500" style="cursor:crosshair; border: 1px solid #000000;"></canvas>
 
         <fieldset id="colorset">
             <table>
@@ -64,9 +66,7 @@
             </table>
         </fieldset>
 
-        <textarea id="prevtext" readonly>
-Shrek beating up the teletubbies.
-		</textarea>
+        <textarea id="prevText" readonly>{{ prevdoodle[1] }}</textarea>
 
 	</div>
 
@@ -74,14 +74,12 @@ Shrek beating up the teletubbies.
 
 		<h2>Guess!</h2>
 		
-		<img id="prevpic" src="../static/teletest.png" alt="What the heck is this?" style="width:500px; height:500px;">
+		<img id="prevImage" src='{{ prevdoodle[0] }}' alt="What the heck is this?" style="width:500px; height:500px;">
 
-		<textarea id="newtext">
-		</textarea>
+		<textarea id="nextText"></textarea>
 
 
 	</div>
-
 	<script src=" {{ url_for('static', filename='script.js') }}"></script>
     <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 

@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, url_for
 from datetime import datetime
 import BHStories
+import json
 
 
 app = Flask(__name__)
@@ -11,6 +12,16 @@ entries = []
 # {IP address:[name, time since last input]}
 users = {}
 
+# {
+# 	'prev_image': 'prev_image',
+# 	'prev_text': 'prev_text'
+# }
+prev_doodle = ['prev_image', 'prev_text']
+
+def set_default(obj):
+    if not isinstance(obj, dict):
+        return dict(obj)
+    raise TypeError
 
 # Returns only the first word of a series of words
 def limit_one_word(user_input):
@@ -73,10 +84,30 @@ def active_story():
 	return redirect(url_for('active_story'))
 
 
-@app.route('/playing', methods=['GET'])
+@app.route('/playing', methods=['GET','POST'])
 def in_game():
+	global prev_doodle
 
-	return render_template('ingame.html')
+	if request.method == 'GET':
+
+		print(prev_doodle)
+
+		return render_template('ingame.html', prevdoodle=prev_doodle)
+
+	elif request.method == 'POST':
+
+		next_image = request.form['next_image']
+		next_text = request.form['next_text']
+
+		#TODO Send [next_image, next_text] to database
+		#TODO Receive [prev_image, prev_text] from database
+		#Below is a workaround for testing now
+
+		prev_doodle[0] = next_image
+		prev_doodle[1] = next_text
+
+		#return render_template('ingame.html', prevdoodle=prev_doodle)
+		return redirect(url_for('in_game'))
 
 
 @app.route('/', methods=['GET'])
@@ -86,4 +117,4 @@ def start_menu():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=4444)
+	app.run(debug=True, port=4444)
