@@ -18,10 +18,6 @@ users = {}
 # }
 prev_doodle = ['prev_image', 'prev_text']
 
-def set_default(obj):
-    if not isinstance(obj, dict):
-        return dict(obj)
-    raise TypeError
 
 # Returns only the first word of a series of words
 def limit_one_word(user_input):
@@ -90,7 +86,8 @@ def in_game():
 
 	if request.method == 'GET':
 
-		print(prev_doodle)
+		print(prev_doodle[1])
+		print(len(prev_doodle[0]))
 
 		return render_template('ingame.html', prevdoodle=prev_doodle)
 
@@ -117,4 +114,4 @@ def start_menu():
 
 
 if __name__ == '__main__':
-	app.run(debug=True, port=4444)
+	app.run(debug=True, host='0.0.0.0', port=4444)
