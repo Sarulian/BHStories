@@ -1,9 +1,10 @@
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, session, escape
 from datetime import datetime
 import json
 
 
 app = Flask(__name__)
+app.secret_key = 'brotherh00d'
 
 # [
 #	[user1.index, 'user1.name'],
@@ -48,9 +49,11 @@ def login():
 
 		return render_template('login.html')
 
-	elif request.method == 'POST':
+	if request.method == 'POST':
 
-		new_user_name = request.form['username']
+		session['username'] = request.form['username']
+
+		new_user_name = session['username']
 
 		new_user = User(new_user_name, i)
 		i+=1
@@ -60,13 +63,16 @@ def login():
 		return redirect(url_for('lobby'))
 
 
-@app.route('/lobby', methods=['GET','POST'])
+@app.route('/lobby', methods=['GET', 'POST'])
 def lobby():
 	global users
 
 	if request.method == 'GET':
 
-		return render_template('lobby.html', users=users)
+		if 'username' in session:
+			return render_template('lobby.html', users=users, currUser=escape(session['username']))
+		else:
+			return redirect(url_for('login'))
 
 	if request.method == 'POST':
 
