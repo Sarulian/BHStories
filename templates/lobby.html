@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang='en'>
+
+	<head>
+		<meta charset='UTF-8'/>
+		<title>Lobby</title>
+	</head>
+
+	<body>
+	<h1>Lobby</h1>
+		<table>
+			<tr>
+				<th>Order</th>
+				<th>Username</th>
+			</tr>
+			{% for user in users %}
+			<tr>	
+				<th>{{ user[0]+1 }}</th>
+				<th>{{ user[1] }}</th>
+			</tr>
+			{% endfor %}
+		</table>
+		<form action="/lobby" method='POST'>
+			<input type="submit" value="Start the game!">
+		</form>
+	</body>
+
+</html>
