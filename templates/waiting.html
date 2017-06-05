@@ -4,12 +4,12 @@
 	<head>
 		<meta charset='UTF-8'/>
 		<meta http-equiv="refresh" content="5" />
-		<title>Lobby</title>
+		<title>Waiting</title>
 	</head>
 
 <body>
 	<a href="/clear"><button>Logout</button></a>
-	<h1>Lobby</h1>
+	<h1>Lobby (Waiting)</h1>
 	<h2>You are signed in as {{ currUser }}</h2>
 		<table>
 			<tr>
@@ -24,7 +24,7 @@
 			{% endfor %}
 		</table>
 		<form action="/lobby" method='POST'>
-			<input type="submit" value="Start the game!">
+			<input type="submit" value="Start the game!" disabled=true>
 		</form>
 	</body>
 
