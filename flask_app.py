@@ -1,14 +1,15 @@
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-import pymysql
+#import pymysql
 from datetime import datetime
 import BHStories
 import json
+import mysql
 
 
 app = Flask(__name__)
 
-SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{username}:{password}@{hostname}/{databasename}".format(
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username="sarulian",
     password="br0therhood",
     hostname="sarulian.mysql.pythonanywhere-services.com",
