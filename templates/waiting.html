@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang='en'>
+
+	<head>
+		<meta charset='UTF-8'/>
+		<meta http-equiv="refresh" content="5" />
+		<title>Waiting</title>
+	</head>
+
+<body>
+	<a href="/clear"><button>Logout</button></a>
+	<h1>Lobby (Waiting)</h1>
+	<h2>You are signed in as {{ currUser }}</h2>
+		<table>
+			<tr>
+				<th>Order</th>
+				<th>Username</th>
+			</tr>
+			{% for user in users %}
+			<tr>	
+				<th>{{ user[0]+1 }}</th>
+				<th>{{ user[1] }}</th>
+			</tr>
+			{% endfor %}
+		</table>
+		<form action="/lobby" method='POST'>
+			<input type="submit" value="Start the game!" disabled=true>
+		</form>
+	</body>
+
+</html>

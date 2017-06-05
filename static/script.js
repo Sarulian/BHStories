@@ -109,9 +109,9 @@ function save(){
     
     $.post('/playing', { next_image: next_image, next_text: next_text });
 
-    setTimeout(function() {
-        location.reload();
-    }, 500);
+    // setTimeout(function() {
+    //     location.reload();
+    // }, 500);
     
 } 
 
