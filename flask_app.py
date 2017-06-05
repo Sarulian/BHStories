@@ -1,10 +1,33 @@
 from flask import Flask, redirect, render_template, request, url_for
+from flask_sqlalchemy import SQLAlchemy
+import pymysql
 from datetime import datetime
 import BHStories
 import json
 
 
 app = Flask(__name__)
+
+SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{username}:{password}@{hostname}/{databasename}".format(
+    username="sarulian",
+    password="br0therhood",
+    hostname="sarulian.mysql.pythonanywhere-services.com",
+    databasename="sarulian$BHStories",
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+
+db = SQLAlchemy(app)
+
+class Doodles(db.Model):
+
+    __tablename__ = "doodles"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.String(32))
+    rounds = db.Column(db.Integer)
+    text = db.Column(db.String(250))
+    drawing = db.Column(db.String(200000))
 
 # [word1,word2,word3,...]
 entries = []
