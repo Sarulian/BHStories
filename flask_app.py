@@ -52,7 +52,13 @@ users_waiting2 = 0
 entries = []
 
 round_index = 0
-i=0
+
+def get_ordered_usernames(users):
+	ordered_usernames = []
+	for user in users:
+		ordered_usernames.append([user.get_order(), user.get_name()])
+
+	return ordered_usernames
 
 
 def order_users():
@@ -71,6 +77,12 @@ def order_users():
 		getting_from[user[1]] = users[prev_index][1]
 
 
+def del_user(users, username):
+	for user in users:
+		if user.get_name() == username:
+			users.remove(user)
+
+
 def next_doodle():
 
 	from_user = getting_from[session['username']]
@@ -85,6 +97,36 @@ def next_doodle():
 	return [next_image, next_text]
 
 
+def all_on_page(users, page):
+
+	all_on = True
+	for user in users:
+		if user.on_page() != page:
+			all_on = False
+	return all_on
+
+
+def in_users(users, this_user):
+
+	in_users = False
+
+	for user in users:
+		if user.get_name() == this_user:
+			in_users = True
+
+	return in_users
+
+
+def set_page(users, to_page):
+	for user in users:
+		if user.get_name == session['username']:
+			user.go_to_page(to_page)
+
+
+def next_index(users):
+	return len(users)
+
+
 class User:
 
 	def __init__(self, name, order, current_page):
@@ -95,11 +137,17 @@ class User:
 	def set_name(self, name):
 		self.name = name
 
+	def set_order(self, order):
+		self.order = order
+
 	def go_to_page(self, page):
 		self.current_page = page
 
 	def get_name(self):
 		return self.name
+
+	def get_order(self):
+		return self.order
 
 	def on_page(self):
 		return self.current_page
@@ -143,113 +191,78 @@ class Doodle:
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	global users
-	global playing
-	global i
 
 	if request.method == 'GET':
 
-		if 'username' in session:
-			if playing:
-				return redirect(url_for('in_game'))
-			else:
-				return render_template('lobby.html', users=users, currUser=escape(session['username']))
+		if 'username' not in session:
+			session['username'] = 'noname'
+
+		# if logged in already go to lobby
+
+		if in_users(users, session['username']):
+			set_page(users, 'lobby')
+			return redirect(url_for('lobby'))
 		else:
-			if playing:
-				return "Sorry a game is in session already."
-			else:
-				return render_template('login.html')
+			return render_template('login.html')
 		
 	if request.method == 'POST':
 
 		session['username'] = request.form['username']
-		session['index'] = i
 
-		i+=1
+		new_user = User(session['username'], next_index(users), 'login')
 
-		users.append([session['index'], session['username']])
+		users.append(new_user)
 
+		set_page(users, 'lobby')
 		return redirect(url_for('lobby'))
 
 
 @app.route('/lobby', methods=['GET', 'POST'])
 def lobby():
 	global users
-	global users_waiting
-	global playing
-	global i
 
 	if request.method == 'GET':
 
-		in_users = False
-		for user in users:
-			if session['username'] in user:
-				in_users = True
-		if not in_users:
-			session['index'] = i
-			users.append([session['index'], session['username']])
-			i+=1
-
-		if 'username' in session:
-			if playing:
-				return redirect(url_for('in_game'))
-			else:
-				in_users = False
-				for user in users:
-					if session['username'] in user:
-						in_users = True
-				if not in_users:
-					users.append([session['index'], session['username']])
-
-				return render_template('lobby.html', users=users, currUser=escape(session['username']))
-		else:
-			if playing:
-				return "Sorry a game is in session already."
-			else:
-				return redirect(url_for('login'))
+		set_page(users, 'lobby')
+		return render_template('lobby.html', users=get_ordered_usernames(users), currUser=escape(session['username']))
 
 	if request.method == 'POST':
 
-		users_waiting += 1
-
-		if users_waiting >= len(users):
-
-			order_users()
-			playing = True
-
-			return redirect(url_for('in_game'))
-		else:
-			return redirect(url_for('waiting'))
+		set_page(users, 'ready')
+		return redirect(url_for('ready'))
 
 
 @app.route('/waiting', methods=['GET'])
 def waiting():
-	global users_waiting
-
-	if users_waiting >= len(users):
-		return redirect(url_for('in_game'))
-	else:
-		return render_template('waiting.html', users=users, currUser=escape(session['username']))
-
-@app.route('/waiting2', methods=['GET'])
-def waiting2():
-	global users_waiting2
 	global users
 
-	print(len(users))
-	print(users_waiting2)
-	if users_waiting2 >= len(users):
-		print("WHYYYYY")
+	print(users)
+	if all_on_page(users, "waiting"):
+		print("Everyone is ready! Starting game.")
 		return redirect(url_for('in_game'))
 	else:
-		print("Huh?")
-		return render_template('waiting2.html')
+		print("Still waiting...")
+		return render_template('ready.html')
+
+
+@app.route('/ready', methods=['GET'])
+def ready():
+	global users
+
+	print(get_ordered_usernames(users))
+
+	if all_on_page(users, "ready"):
+		print("Everyone is ready! Starting game.")
+		return redirect(url_for('in_game'))
+	else:
+		print("Still waiting...")
+		return render_template('ready.html')
 
 
 @app.route('/playing', methods=['GET','POST'])
 def in_game():
 	global doodles
 	global playing
-	global users_waiting2
 	global round_index
 
 	if request.method == 'GET':
@@ -269,7 +282,6 @@ def in_game():
 
 	elif request.method == 'POST':
 
-		users_waiting2 += 1
 		image = request.form['next_image']
 		text = request.form['next_text']
 
@@ -294,18 +306,10 @@ def in_game():
 # Logs out user
 @app.route('/clear')
 def clear():
-	global playing
-	global i
+	global users
 
-	try:
-		del users[session['index']]
-		i-=1
-	except (IndexError, KeyError) as e:
-		print("Out of range")
-
+	del_user(users, session['username'])
 	session.clear()
-	playing = False
-	print(i)
 
 	return redirect(url_for('login'))
 
