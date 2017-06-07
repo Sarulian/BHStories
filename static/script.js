@@ -109,6 +109,8 @@ function save(){
     
     $.post('/playing', { next_image: next_image, next_text: next_text });
 
+    document.getElementById("submitDoodle").submit();
+
     // setTimeout(function() {
     //     location.reload();
     // }, 500);
